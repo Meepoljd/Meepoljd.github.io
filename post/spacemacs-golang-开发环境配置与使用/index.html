@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>spacemacs golang 开发环境配置与使用 - 老东叔睡不着</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="老东叔" /><meta name="description" content="spacemacs镜像 https://mirrors.tuna.tsinghua.edu.cn/help/elpa/ master 分支 添加下面的代码到.spacemacs的dotspacemacs/user-init() 1 2 3 4 (setq configuration-layer--elpa-archives &amp;#39;((&amp;#34;melpa-cn&amp;#34; . &amp;#34;http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/&amp;#34;) (&amp;#34;org-cn&amp;#34; . &amp;#34;http://mirrors.tuna.tsinghua.edu.cn/elpa/org/&amp;#34;)" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.72.0 with theme even" />
+
+
+<link rel="canonical" href="http://localhost:1313/post/spacemacs-golang-%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E4%B8%8E%E4%BD%BF%E7%94%A8/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.78f8f17bab244b9ee62ad16480c9584d5fc2db06ae20681d1ca225cefd80767c.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="spacemacs golang 开发环境配置与使用" />
+<meta property="og:description" content="spacemacs镜像 https://mirrors.tuna.tsinghua.edu.cn/help/elpa/ master 分支 添加下面的代码到.spacemacs的dotspacemacs/user-init() 1 2 3 4 (setq configuration-layer--elpa-archives &#39;((&#34;melpa-cn&#34; . &#34;http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/&#34;) (&#34;org-cn&#34; . &#34;http://mirrors.tuna.tsinghua.edu.cn/elpa/org/&#34;)" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://localhost:1313/post/spacemacs-golang-%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E4%B8%8E%E4%BD%BF%E7%94%A8/" />
+<meta property="article:published_time" content="2020-06-13T23:42:11+00:00" />
+<meta property="article:modified_time" content="2020-06-13T23:42:11+00:00" />
+<meta itemprop="name" content="spacemacs golang 开发环境配置与使用">
+<meta itemprop="description" content="spacemacs镜像 https://mirrors.tuna.tsinghua.edu.cn/help/elpa/ master 分支 添加下面的代码到.spacemacs的dotspacemacs/user-init() 1 2 3 4 (setq configuration-layer--elpa-archives &#39;((&#34;melpa-cn&#34; . &#34;http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/&#34;) (&#34;org-cn&#34; . &#34;http://mirrors.tuna.tsinghua.edu.cn/elpa/org/&#34;)">
+<meta itemprop="datePublished" content="2020-06-13T23:42:11&#43;00:00" />
+<meta itemprop="dateModified" content="2020-06-13T23:42:11&#43;00:00" />
+<meta itemprop="wordCount" content="422">
+
+
+
+<meta itemprop="keywords" content="" /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="spacemacs golang 开发环境配置与使用"/>
+<meta name="twitter:description" content="spacemacs镜像 https://mirrors.tuna.tsinghua.edu.cn/help/elpa/ master 分支 添加下面的代码到.spacemacs的dotspacemacs/user-init() 1 2 3 4 (setq configuration-layer--elpa-archives &#39;((&#34;melpa-cn&#34; . &#34;http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/&#34;) (&#34;org-cn&#34; . &#34;http://mirrors.tuna.tsinghua.edu.cn/elpa/org/&#34;)"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">老东叔睡不着</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">老东叔睡不着</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">spacemacs golang 开发环境配置与使用</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2020-06-13 </span>
+        
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#master-分支">master 分支</a></li>
+        <li><a href="#develop-分支">develop 分支</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <p><!-- raw HTML omitted --><!-- raw HTML omitted --></p>
+<h1 id="spacemacs镜像">spacemacs镜像</h1>
+<p><a href="https://mirrors.tuna.tsinghua.edu.cn/help/elpa/">https://mirrors.tuna.tsinghua.edu.cn/help/elpa/</a>
+<!-- raw HTML omitted --><!-- raw HTML omitted --></p>
+<h3 id="master-分支">master 分支</h3>
+<p>添加下面的代码到<code>.spacemacs</code>的<code>dotspacemacs/user-init()</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">(setq configuration-layer--elpa-archives
+    &#39;((&#34;melpa-cn&#34; . &#34;http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/&#34;)
+      (&#34;org-cn&#34;   . &#34;http://mirrors.tuna.tsinghua.edu.cn/elpa/org/&#34;)
+      (&#34;gnu-cn&#34;   . &#34;http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/&#34;)))
+</code></pre></td></tr></table>
+</div>
+</div><p><!-- raw HTML omitted --><!-- raw HTML omitted --></p>
+<h3 id="develop-分支">develop 分支</h3>
+<p>使用 <code>configuration-layer-elpa-archives</code> 代替原来的 <code>configuration-layer--elpa-archives</code> （ <code>--</code> 换成 <code>-</code> ）</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">(setq configuration-layer-elpa-archives
+    &#39;((&#34;melpa-cn&#34; . &#34;http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/&#34;)
+      (&#34;org-cn&#34;   . &#34;http://mirrors.tuna.tsinghua.edu.cn/elpa/org/&#34;)
+      (&#34;gnu-cn&#34;   . &#34;http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/&#34;)))
+</code></pre></td></tr></table>
+</div>
+</div><p><!-- raw HTML omitted --><!-- raw HTML omitted --></p>
+<h1 id="go-layer依赖">go layer依赖</h1>
+<p>参考 <a href="https://emacs-lsp.github.io/lsp-mode/page/lsp-bingo/">https://emacs-lsp.github.io/lsp-mode/page/lsp-bingo/</a> 安装go-bingo与gopls</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">go get -u github.com/saibing/bingo
+</code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="nv">GO111MODULE</span><span class="o">=</span>on go get golang.org/x/tools/gopls@latest
+</code></pre></td></tr></table>
+</div>
+</div><p><!-- raw HTML omitted --><!-- raw HTML omitted --></p>
+<h1 id="dotspacemacs配置">dotspacemacs配置</h1>
+<p>layer选择</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">dotspacemacs-configuration-layers
+   &#39;(python
+     ;; ----------------------------------------------------------------
+     ;; Example of useful layers you may want to use right away.
+     ;; Uncomment some layer names and press `SPC f e R&#39; (Vim style) or
+     ;; `M-m f e R&#39; (Emacs style) to install them.
+     ;; ----------------------------------------------------------------
+     auto-completion
+     better-defaults
+     emacs-lisp
+     git
+     helm
+     lsp
+     markdown
+     multiple-cursors
+     org
+     (shell :variables
+            shell-default-height 30
+            shell-default-position &#39;bottom)
+     spell-checking
+     (go :variables
+         go-backend &#39;lsp
+         go-tab-width 8
+         godoc-at-point-function &#39;godoc-gogetdoc)
+     java
+     syntax-checking
+     version-control
+     treemacs
+     )
+</code></pre></td></tr></table>
+</div>
+</div><p>user-config</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="p">(</span><span class="nx">defun</span> <span class="nx">dotspacemacs</span><span class="o">/</span><span class="nx">user</span><span class="o">-</span><span class="nf">config</span> <span class="p">()</span>
+  <span class="s">&#34;Configuration for user code:
+</span><span class="s">This function is called at the very end of Spacemacs startup, after layer
+</span><span class="s">configuration.
+</span><span class="s">Put your configuration code here, except for variables that should be set
+</span><span class="s">before packages are loaded.&#34;</span>
+  <span class="p">;;</span> <span class="nx">这里修复goto</span><span class="o">-</span><span class="nf">def错误</span>
+  <span class="p">(</span><span class="nx">setq</span> <span class="nx">spacemacs</span><span class="o">-</span><span class="k">default</span><span class="o">-</span><span class="nx">jump</span><span class="o">-</span><span class="nf">handlers</span>
+        <span class="p">(</span><span class="nx">remove</span> <span class="err">&#39;</span><span class="nx">evil</span><span class="o">-</span><span class="k">goto</span><span class="o">-</span><span class="nx">definition</span> <span class="nx">spacemacs</span><span class="o">-</span><span class="k">default</span><span class="o">-</span><span class="nx">jump</span><span class="o">-</span><span class="nx">handlers</span><span class="p">))</span>
+  <span class="p">;;</span> <span class="nf">lsp</span>
+  <span class="p">(</span><span class="nx">use</span><span class="o">-</span><span class="kn">package</span> <span class="nx">lsp</span><span class="o">-</span><span class="nx">mode</span>
+    <span class="p">:</span><span class="nf">hook</span> <span class="p">(</span><span class="k">go</span><span class="o">-</span><span class="nx">mode</span> <span class="p">.</span> <span class="nx">lsp</span><span class="o">-</span><span class="nx">deferred</span><span class="p">)</span>
+    <span class="p">:</span><span class="nf">commands</span> <span class="p">(</span><span class="nx">lsp</span> <span class="nx">lsp</span><span class="o">-</span><span class="nx">deferred</span><span class="p">))</span>
+
+  <span class="p">(</span><span class="nx">setq</span> <span class="nx">lsp</span><span class="o">-</span><span class="nx">auto</span><span class="o">-</span><span class="nx">guess</span><span class="o">-</span><span class="nx">root</span> <span class="kc">nil</span><span class="p">)</span>
+  <span class="p">(</span><span class="nx">setq</span> <span class="nx">lsp</span><span class="o">-</span><span class="nx">ui</span><span class="o">-</span><span class="nx">doc</span><span class="o">-</span><span class="nx">enable</span> <span class="kc">nil</span><span class="p">)</span>
+  <span class="p">(</span><span class="nx">setq</span> <span class="nx">lsp</span><span class="o">-</span><span class="nx">ui</span><span class="o">-</span><span class="nx">sideline</span><span class="o">-</span><span class="nx">enable</span> <span class="kc">nil</span><span class="p">)</span>
+  <span class="p">(</span><span class="nx">setq</span> <span class="nx">lsp</span><span class="o">-</span><span class="nx">prefer</span><span class="o">-</span><span class="nx">flymake</span> <span class="p">:</span><span class="nx">none</span><span class="p">)</span>
+  <span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><!-- raw HTML omitted --><!-- raw HTML omitted --></p>
+<h1 id="常用快捷键">常用快捷键</h1>
+<ol>
+<li>M-m / : find-in-path</li>
+<li>M-m m g g : go to def</li>
+<li>M-m , : 返回上一个文件</li>
+<li>M-m f t : 打开treemacs</li>
+<li>c c / c d : treemacs 中创建文件/文件夹</li>
+</ol>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">老东叔</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2020-06-13
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      
+      <nav class="post-nav">
+        <a class="prev" href="/post/hugo-%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E4%B8%8E%E5%86%85%E5%AE%B9%E5%90%8C%E6%AD%A5/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">Hugo 个人博客搭建与内容同步</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/post/spring%E4%B8%AD%E7%9A%84%E6%B3%A8%E5%85%A5%E6%96%B9%E5%BC%8F%E5%AF%B9%E6%AF%94/">
+            <span class="next-text nav-default">spring中的注入方式对比</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:jiandong.liu93@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://github.com/Meepoljd" class="iconfont icon-github" title="github"></a>
+  <a href="http://localhost:1313/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2019 - 
+    2020
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">老东叔</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.d7b7ada643c9c1a983026e177f141f7363b4640d619caf01d8831a6718cd44ea.js"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

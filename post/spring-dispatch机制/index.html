@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Spring Dispatch机制 - 老东叔睡不着</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="老东叔" /><meta name="description" content="为了好的理解Spring中如何搜索用于处理请求的类，所以对Dispatch的机制进行了解。基本概念 什么是servlet servlet其实是一" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.72.0 with theme even" />
+
+
+<link rel="canonical" href="http://localhost:1313/post/spring-dispatch%E6%9C%BA%E5%88%B6/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.78f8f17bab244b9ee62ad16480c9584d5fc2db06ae20681d1ca225cefd80767c.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="Spring Dispatch机制" />
+<meta property="og:description" content="为了好的理解Spring中如何搜索用于处理请求的类，所以对Dispatch的机制进行了解。基本概念 什么是servlet servlet其实是一" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://localhost:1313/post/spring-dispatch%E6%9C%BA%E5%88%B6/" />
+<meta property="article:published_time" content="2019-08-29T10:06:38+00:00" />
+<meta property="article:modified_time" content="2019-08-29T10:06:38+00:00" />
+<meta itemprop="name" content="Spring Dispatch机制">
+<meta itemprop="description" content="为了好的理解Spring中如何搜索用于处理请求的类，所以对Dispatch的机制进行了解。基本概念 什么是servlet servlet其实是一">
+<meta itemprop="datePublished" content="2019-08-29T10:06:38&#43;00:00" />
+<meta itemprop="dateModified" content="2019-08-29T10:06:38&#43;00:00" />
+<meta itemprop="wordCount" content="2453">
+
+
+
+<meta itemprop="keywords" content="" /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Spring Dispatch机制"/>
+<meta name="twitter:description" content="为了好的理解Spring中如何搜索用于处理请求的类，所以对Dispatch的机制进行了解。基本概念 什么是servlet servlet其实是一"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">老东叔睡不着</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">老东叔睡不着</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Spring Dispatch机制</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2019-08-29 </span>
+        
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#什么是servlet">什么是servlet</a></li>
+    <li><a href="#什么是dispatcherservlet">什么是DispatcherServlet</a></li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <p>为了好的理解Spring中如何搜索用于处理请求的类，所以对Dispatch的机制进行了解。<!-- raw HTML omitted --><!-- raw HTML omitted -->
+<!-- raw HTML omitted --><!-- raw HTML omitted --></p>
+<h1 id="基本概念">基本概念</h1>
+<p><!-- raw HTML omitted --><!-- raw HTML omitted --></p>
+<h2 id="什么是servlet">什么是servlet</h2>
+<p>servlet其实是一个接口，包含了init，service等函数。是java用于规定一个用于处理请求的类，什么时间该做什么的规范。放在一个容器里，例如tomcat，tomcat会负责执行这些行为处理请求。
+<!-- raw HTML omitted --><!-- raw HTML omitted --></p>
+<h2 id="什么是dispatcherservlet">什么是DispatcherServlet</h2>
+<p>以下内容主要来自spring-framwork文档及注释。<!-- raw HTML omitted -->Dispatcher用于将Http请求分发到已经注册的Handler中处理。并在其中提供了mapping的映射机制以及异常处理。以下是几个流程中涉及的几个主要概念：</p>
+<ul>
+<li>HandlerMapping：控制从request向对应处理的handler的分发关系。默认使用BeanNameHandlerMapping与RequestMappingHandlerMapping。</li>
+<li>HandlerAdapter：</li>
+<li>HandlerExceptionResolver：用于指定异常处理的策略</li>
+<li>ViewResolver：指定View的处理策略</li>
+<li>RequestToViewNameTranslator：若用户没有支持某个view或者view name，就会根据其中定义的翻译关系将请求转换为view name</li>
+<li>MultipartResolver：处理multipart请求的策略</li>
+<li>LocaleResolver：用于处理i18n策略</li>
+<li>ThemeResolver：处理theme的策略</li>
+</ul>
+<p>一个web应用可以定义任意数量的DispatcherServlets。没一个DispatcherServlets操作自己的命名空间，使用自己的上下文来维护mapping，handler等内容。只有spring的ContextLoaderListener加载的root context是公用的。对Sping 3.1一个dispatcherServlets可以被注入一个context，而不用自己创建一个。
+<!-- raw HTML omitted --><!-- raw HTML omitted --></p>
+<h1 id="dispatcherservlet">DispatcherServlet</h1>
+<p>本节主要通过DispatcherServlet的视角，来对整个机制进行一个大致的了解。为了提炼内容，这里略过常量定义与getter，setter。<!-- raw HTML omitted -->通过static代码块，spring首先为Dispatcher加载的默认的strategy。由于是默认配置，所以并不推荐开发者修改。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">static</span> <span class="o">{</span>
+    <span class="n">ClassPathResource</span> <span class="n">resource</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ClassPathResource</span><span class="o">(</span><span class="n">DEFAULT_STRATEGIES_PATH</span><span class="o">,</span> <span class="n">DispatcherServlet</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+    <span class="n">defaultStrategies</span> <span class="o">=</span> <span class="n">PropertiesLoaderUtils</span><span class="o">.</span><span class="na">loadProperties</span><span class="o">(</span><span class="n">resource</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>在构造器的实现上，有以下几种：</p>
+<ul>
+<li>默认的无参数构造器：Dispatcher会创建一个使用默认参数的内部context</li>
+<li>接收context构造器：通过接受一个给定的context创建Dispatcher</li>
+</ul>
+<p>以上的实现主要内容都来自于父类，这里不再展开。<!-- raw HTML omitted -->在后面的onRefresh回调函数中，定义了各个strategy初始化的行为。这一回调函数会在context的初始化，以及刷新过程内调用（同样位于父类）。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="nd">@Override</span>
+<span class="kd">protected</span> <span class="kt">void</span> <span class="nf">onRefresh</span><span class="o">(</span><span class="n">ApplicationContext</span> <span class="n">context</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">initStrategies</span><span class="o">(</span><span class="n">context</span><span class="o">);</span>
+<span class="o">}</span>
+<span class="kd">protected</span> <span class="kt">void</span> <span class="nf">initStrategies</span><span class="o">(</span><span class="n">ApplicationContext</span> <span class="n">context</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">initMultipartResolver</span><span class="o">(</span><span class="n">context</span><span class="o">);</span>
+    <span class="n">initLocaleResolver</span><span class="o">(</span><span class="n">context</span><span class="o">);</span>
+    <span class="n">initThemeResolver</span><span class="o">(</span><span class="n">context</span><span class="o">);</span>
+    <span class="n">initHandlerMappings</span><span class="o">(</span><span class="n">context</span><span class="o">);</span>
+    <span class="n">initHandlerAdapters</span><span class="o">(</span><span class="n">context</span><span class="o">);</span>
+    <span class="n">initHandlerExceptionResolvers</span><span class="o">(</span><span class="n">context</span><span class="o">);</span>
+    <span class="n">initRequestToViewNameTranslator</span><span class="o">(</span><span class="n">context</span><span class="o">);</span>
+    <span class="n">initViewResolvers</span><span class="o">(</span><span class="n">context</span><span class="o">);</span>
+    <span class="n">initFlashMapManager</span><span class="o">(</span><span class="n">context</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>在这里调用的若干initXXXX函数，主要用于获取实例，以initMultipartResolver为例。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">private</span> <span class="kt">void</span> <span class="nf">initMultipartResolver</span><span class="o">(</span><span class="n">ApplicationContext</span> <span class="n">context</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">try</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">multipartResolver</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="na">getBean</span><span class="o">(</span><span class="n">MULTIPART_RESOLVER_BEAN_NAME</span><span class="o">,</span> <span class="n">MultipartResolver</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+    <span class="o">}</span>
+    <span class="k">catch</span> <span class="o">(</span><span class="n">NoSuchBeanDefinitionException</span> <span class="n">ex</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">multipartResolver</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>下面进入处理请求的主要部分，doService方法。经过spring的层层封装，请求的主要处理位于DispatcherServlet的父类FrameworkServlet中。其主要处理步骤为doService方法，并被重写于Dispatcher实现中。主要功能是暴露Dispatcher的一些属性，并将分发行为委托给doDispatch。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="nd">@Override</span>
+<span class="kd">protected</span> <span class="kt">void</span> <span class="nf">doService</span><span class="o">(</span><span class="n">HttpServletRequest</span> <span class="n">request</span><span class="o">,</span> <span class="n">HttpServletResponse</span> <span class="n">response</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+    <span class="c1">// 为了简化讨论，删除了log相关的代码。毕竟控制台里天天见
+</span><span class="c1"></span>    <span class="c1">// 这里是为了处理请求包含（include），即将另一个servlet的处理包含进来，保存参数以便恢复
+</span><span class="c1"></span>    <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Object</span><span class="o">&gt;</span> <span class="n">attributesSnapshot</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">WebUtils</span><span class="o">.</span><span class="na">isIncludeRequest</span><span class="o">(</span><span class="n">request</span><span class="o">))</span> <span class="o">{</span>
+        <span class="n">attributesSnapshot</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">&lt;&gt;();</span>
+        <span class="n">Enumeration</span><span class="o">&lt;?&gt;</span> <span class="n">attrNames</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="na">getAttributeNames</span><span class="o">();</span>
+        <span class="k">while</span> <span class="o">(</span><span class="n">attrNames</span><span class="o">.</span><span class="na">hasMoreElements</span><span class="o">())</span> <span class="o">{</span>
+            <span class="n">String</span> <span class="n">attrName</span> <span class="o">=</span> <span class="o">(</span><span class="n">String</span><span class="o">)</span> <span class="n">attrNames</span><span class="o">.</span><span class="na">nextElement</span><span class="o">();</span>
+            <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">cleanupAfterInclude</span> <span class="o">||</span> <span class="n">attrName</span><span class="o">.</span><span class="na">startsWith</span><span class="o">(</span><span class="n">DEFAULT_STRATEGIES_PREFIX</span><span class="o">))</span> <span class="o">{</span>
+                <span class="n">attributesSnapshot</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">attrName</span><span class="o">,</span> <span class="n">request</span><span class="o">.</span><span class="na">getAttribute</span><span class="o">(</span><span class="n">attrName</span><span class="o">));</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+    <span class="c1">// 暴露属性，使得对象可以调用到相应资源
+</span><span class="c1"></span>    <span class="n">request</span><span class="o">.</span><span class="na">setAttribute</span><span class="o">(</span><span class="n">WEB_APPLICATION_CONTEXT_ATTRIBUTE</span><span class="o">,</span> <span class="n">getWebApplicationContext</span><span class="o">());</span>
+    <span class="n">request</span><span class="o">.</span><span class="na">setAttribute</span><span class="o">(</span><span class="n">LOCALE_RESOLVER_ATTRIBUTE</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="na">localeResolver</span><span class="o">);</span>
+    <span class="n">request</span><span class="o">.</span><span class="na">setAttribute</span><span class="o">(</span><span class="n">THEME_RESOLVER_ATTRIBUTE</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="na">themeResolver</span><span class="o">);</span>
+    <span class="n">request</span><span class="o">.</span><span class="na">setAttribute</span><span class="o">(</span><span class="n">THEME_SOURCE_ATTRIBUTE</span><span class="o">,</span> <span class="n">getThemeSource</span><span class="o">());</span>
+    <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">flashMapManager</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">FlashMap</span> <span class="n">inputFlashMap</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="na">flashMapManager</span><span class="o">.</span><span class="na">retrieveAndUpdate</span><span class="o">(</span><span class="n">request</span><span class="o">,</span> <span class="n">response</span><span class="o">);</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">inputFlashMap</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">request</span><span class="o">.</span><span class="na">setAttribute</span><span class="o">(</span><span class="n">INPUT_FLASH_MAP_ATTRIBUTE</span><span class="o">,</span> <span class="n">Collections</span><span class="o">.</span><span class="na">unmodifiableMap</span><span class="o">(</span><span class="n">inputFlashMap</span><span class="o">));</span>
+        <span class="o">}</span>
+        <span class="n">request</span><span class="o">.</span><span class="na">setAttribute</span><span class="o">(</span><span class="n">OUTPUT_FLASH_MAP_ATTRIBUTE</span><span class="o">,</span> <span class="k">new</span> <span class="n">FlashMap</span><span class="o">());</span>
+        <span class="n">request</span><span class="o">.</span><span class="na">setAttribute</span><span class="o">(</span><span class="n">FLASH_MAP_MANAGER_ATTRIBUTE</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="na">flashMapManager</span><span class="o">);</span>
+    <span class="o">}</span>
+    <span class="c1">// 委托分发行为
+</span><span class="c1"></span>    <span class="k">try</span> <span class="o">{</span>
+        <span class="n">doDispatch</span><span class="o">(</span><span class="n">request</span><span class="o">,</span> <span class="n">response</span><span class="o">);</span>
+    <span class="o">}</span>
+    <span class="k">finally</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(!</span><span class="n">WebAsyncUtils</span><span class="o">.</span><span class="na">getAsyncManager</span><span class="o">(</span><span class="n">request</span><span class="o">).</span><span class="na">isConcurrentHandlingStarted</span><span class="o">())</span> <span class="o">{</span>
+            <span class="c1">// 还原现场
+</span><span class="c1"></span>            <span class="k">if</span> <span class="o">(</span><span class="n">attributesSnapshot</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">restoreAttributesAfterInclude</span><span class="o">(</span><span class="n">request</span><span class="o">,</span> <span class="n">attributesSnapshot</span><span class="o">);</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>下面是分发的核心函数doDispatch</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">protected</span> <span class="kt">void</span> <span class="nf">doDispatch</span><span class="o">(</span><span class="n">HttpServletRequest</span> <span class="n">request</span><span class="o">,</span> <span class="n">HttpServletResponse</span> <span class="n">response</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+    <span class="n">HttpServletRequest</span> <span class="n">processedRequest</span> <span class="o">=</span> <span class="n">request</span><span class="o">;</span>
+    <span class="n">HandlerExecutionChain</span> <span class="n">mappedHandler</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+    <span class="kt">boolean</span> <span class="n">multipartRequestParsed</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+	<span class="c1">// ....
+</span><span class="c1"></span>    <span class="k">try</span> <span class="o">{</span>
+        <span class="n">ModelAndView</span> <span class="n">mv</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+        <span class="n">Exception</span> <span class="n">dispatchException</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+
+        <span class="k">try</span> <span class="o">{</span>
+            <span class="n">processedRequest</span> <span class="o">=</span> <span class="n">checkMultipart</span><span class="o">(</span><span class="n">request</span><span class="o">);</span>
+            <span class="n">multipartRequestParsed</span> <span class="o">=</span> <span class="o">(</span><span class="n">processedRequest</span> <span class="o">!=</span> <span class="n">request</span><span class="o">);</span>
+
+            <span class="c1">// Determine handler for the current request.
+</span><span class="c1"></span>            <span class="n">mappedHandler</span> <span class="o">=</span> <span class="n">getHandler</span><span class="o">(</span><span class="n">processedRequest</span><span class="o">);</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">mappedHandler</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">noHandlerFound</span><span class="o">(</span><span class="n">processedRequest</span><span class="o">,</span> <span class="n">response</span><span class="o">);</span>
+                <span class="k">return</span><span class="o">;</span>
+            <span class="o">}</span>
+
+            <span class="c1">// Determine handler adapter for the current request.
+</span><span class="c1"></span>            <span class="n">HandlerAdapter</span> <span class="n">ha</span> <span class="o">=</span> <span class="n">getHandlerAdapter</span><span class="o">(</span><span class="n">mappedHandler</span><span class="o">.</span><span class="na">getHandler</span><span class="o">());</span>
+
+            <span class="c1">// Process last-modified header, if supported by the handler.
+</span><span class="c1"></span>            
+            <span class="k">if</span> <span class="o">(!</span><span class="n">mappedHandler</span><span class="o">.</span><span class="na">applyPreHandle</span><span class="o">(</span><span class="n">processedRequest</span><span class="o">,</span> <span class="n">response</span><span class="o">))</span> <span class="o">{</span>
+                <span class="k">return</span><span class="o">;</span>
+            <span class="o">}</span>
+
+            <span class="c1">// Actually invoke the handler.
+</span><span class="c1"></span>            <span class="n">mv</span> <span class="o">=</span> <span class="n">ha</span><span class="o">.</span><span class="na">handle</span><span class="o">(</span><span class="n">processedRequest</span><span class="o">,</span> <span class="n">response</span><span class="o">,</span> <span class="n">mappedHandler</span><span class="o">.</span><span class="na">getHandler</span><span class="o">());</span>
+
+            <span class="n">applyDefaultViewName</span><span class="o">(</span><span class="n">processedRequest</span><span class="o">,</span> <span class="n">mv</span><span class="o">);</span>
+            <span class="n">mappedHandler</span><span class="o">.</span><span class="na">applyPostHandle</span><span class="o">(</span><span class="n">processedRequest</span><span class="o">,</span> <span class="n">response</span><span class="o">,</span> <span class="n">mv</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="k">catch</span> <span class="o">(</span><span class="n">Exception</span> <span class="n">ex</span><span class="o">)</span> <span class="o">{</span><span class="c1">// 一些异常处理}
+</span><span class="c1"></span>        <span class="n">processDispatchResult</span><span class="o">(</span><span class="n">processedRequest</span><span class="o">,</span> <span class="n">response</span><span class="o">,</span> <span class="n">mappedHandler</span><span class="o">,</span> <span class="n">mv</span><span class="o">,</span> <span class="n">dispatchException</span><span class="o">);</span>
+    <span class="o">}</span>
+    <span class="k">catch</span> <span class="o">(</span><span class="n">Exception</span> <span class="n">ex</span><span class="o">)</span> <span class="o">{</span><span class="c1">// 一些异常处理}
+</span><span class="c1"></span>    <span class="k">finally</span> <span class="o">{</span>
+       <span class="c1">// 异步的处理 
+</span><span class="c1"></span>        <span class="k">else</span> <span class="o">{</span>
+            <span class="c1">// Clean up any resources used by a multipart request.
+</span><span class="c1"></span>            <span class="k">if</span> <span class="o">(</span><span class="n">multipartRequestParsed</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">cleanupMultipart</span><span class="o">(</span><span class="n">processedRequest</span><span class="o">);</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+</code></pre></td></tr></table>
+</div>
+</div><p>这里首先略过异步处理的问题（TODO：稍后专门写一下）。</p>
+<ol>
+<li>doDispatch对multipart的请求进行处理，主要是使用WebUtil对请求进行multipart的包裹。</li>
+<li>调用getHandler的方法，遍历每一个HandlerMapping，从其中记录的数据搜索可以匹配的handler，返回第一个可用的Handler，因此也可以认为这个顺序是包含着优先级的概念的（使用List保存的）。一旦找不到可用的Handler，整个流程也就结束在这里了。</li>
+<li>在处理last-modified header之后， ** 调用各个HandlerInterceptor的中的PreHandler。**也就是说，我们平时定义的HandlerInterceptor的preHandler在这一步生效。</li>
+<li>调用handle方法进行真正的调用。</li>
+<li>同上的进行postHandler的处理。</li>
+<li>调用processDispatchResult处理结果。包含渲染页面等等操作
+<!-- raw HTML omitted --><!-- raw HTML omitted --></li>
+</ol>
+<h1 id="小结">小结</h1>
+<p>以上是DispatcherServlet的一个大概整理，主要是Dispatch的主要流程。在过程中略过了一些细节，希望可以对整个流程有一个大概的把握，稍后会针对中间忽略的内容进行学习。</p>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">老东叔</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2019-08-29
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      
+      <nav class="post-nav">
+        <a class="prev" href="/post/getbeansoftype%E4%B8%8Egetbeans%E5%8C%BA%E5%88%AB/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">getBeansOfType与getBeans区别</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:jiandong.liu93@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://github.com/Meepoljd" class="iconfont icon-github" title="github"></a>
+  <a href="http://localhost:1313/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2019 - 
+    2020
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">老东叔</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.d7b7ada643c9c1a983026e177f141f7363b4640d619caf01d8831a6718cd44ea.js"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

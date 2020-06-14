@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Bad smell - 老东叔睡不着</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="老东叔" /><meta name="description" content="在代码评审时有两个问题被指出了，主要涉及多层嵌套与异常处理的习惯，以及一些平时工作上的习惯问题。&amp;lt; !&amp;ndash; more &amp;ndash;&amp;gt; 多层的if嵌套 原版的代码中，对" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.72.0 with theme even" />
+
+
+<link rel="canonical" href="http://localhost:1313/post/bad-smell/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.78f8f17bab244b9ee62ad16480c9584d5fc2db06ae20681d1ca225cefd80767c.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="Bad smell" />
+<meta property="og:description" content="在代码评审时有两个问题被指出了，主要涉及多层嵌套与异常处理的习惯，以及一些平时工作上的习惯问题。&lt; !&ndash; more &ndash;&gt; 多层的if嵌套 原版的代码中，对" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://localhost:1313/post/bad-smell/" />
+<meta property="article:published_time" content="2019-09-11T19:33:26+00:00" />
+<meta property="article:modified_time" content="2020-06-14T21:37:09+08:00" />
+<meta itemprop="name" content="Bad smell">
+<meta itemprop="description" content="在代码评审时有两个问题被指出了，主要涉及多层嵌套与异常处理的习惯，以及一些平时工作上的习惯问题。&lt; !&ndash; more &ndash;&gt; 多层的if嵌套 原版的代码中，对">
+<meta itemprop="datePublished" content="2019-09-11T19:33:26&#43;00:00" />
+<meta itemprop="dateModified" content="2020-06-14T21:37:09&#43;08:00" />
+<meta itemprop="wordCount" content="796">
+
+
+
+<meta itemprop="keywords" content="" /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Bad smell"/>
+<meta name="twitter:description" content="在代码评审时有两个问题被指出了，主要涉及多层嵌套与异常处理的习惯，以及一些平时工作上的习惯问题。&lt; !&ndash; more &ndash;&gt; 多层的if嵌套 原版的代码中，对"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">老东叔睡不着</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">老东叔睡不着</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Bad smell</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2019-09-11 </span>
+        
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#吃异常">吃异常</a></li>
+    <li><a href="#日志处理">日志处理</a></li>
+    <li><a href="#异常与错误码对前端的影响">异常与错误码对前端的影响</a></li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <p>在代码评审时有两个问题被指出了，主要涉及多层嵌套与异常处理的习惯，以及一些平时工作上的习惯问题。<!-- raw HTML omitted -->&lt; !&ndash; more &ndash;&gt;
+<!-- raw HTML omitted --><!-- raw HTML omitted --></p>
+<h1 id="多层的if嵌套">多层的if嵌套</h1>
+<p>原版的代码中，对一个接口的调用的返回结果进行检查，分情况检查错误抛出异常，或者返回结果的流程如下</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="c1">// 这里略过接口的调用过程
+</span><span class="c1"></span><span class="n">Response</span> <span class="n">rep</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Response</span><span class="o">();</span>
+<span class="k">if</span> <span class="o">(</span><span class="n">rep</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">if</span> <span class="o">(!</span><span class="n">res</span><span class="o">.</span><span class="na">hasError</span><span class="o">())</span> <span class="o">{</span>
+        <span class="c1">// res中内容提取content
+</span><span class="c1"></span>        <span class="k">if</span> <span class="o">(</span><span class="n">content</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="n">content</span><span class="o">;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+<span class="k">throw</span> <span class="k">new</span> <span class="n">Exception</span><span class="o">(</span><span class="s">&#34;在这里抛出异常&#34;</span><span class="o">);</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>这只是一个简化的示意，真是的代码结合具体业务逻辑，整个代码嵌套了五层。可读性极差。因此，使用卫语句重构代码，那个把throw放在最后的思路简直一无是处。重构后代码如下。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="c1">// 这里略过接口的调用过程
+</span><span class="c1"></span><span class="n">Response</span> <span class="n">rep</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Response</span><span class="o">();</span>
+<span class="k">if</span> <span class="o">(</span><span class="n">rep</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">throw</span> <span class="k">new</span> <span class="n">Exception</span><span class="o">(</span><span class="s">&#34;请求结果为空&#34;</span><span class="o">);</span>
+<span class="o">}</span>
+<span class="k">if</span> <span class="o">(</span><span class="n">rep</span><span class="o">.</span><span class="na">hasError</span><span class="o">())</span> <span class="o">{</span>
+    <span class="k">throw</span> <span class="k">new</span> <span class="n">EXception</span><span class="o">();</span>
+<span class="o">}</span>
+<span class="c1">// 处理。。。
+</span><span class="c1"></span><span class="k">if</span> <span class="o">(</span><span class="n">content</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">throw</span> <span class="k">new</span> <span class="n">Exception</span><span class="o">();</span>
+<span class="o">}</span>
+<span class="k">return</span> <span class="n">content</span><span class="o">;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>这个评审也要注意，经手的代码中的bad smell，在提交前要进行力所能及的修改，不能因为是同事写的就不管不顾，不然评审时可能通不过。
+<!-- raw HTML omitted --><!-- raw HTML omitted --></p>
+<h1 id="异常处理">异常处理</h1>
+<p>近期异常相关的代码出现的诸多错漏，这些问题是之前在学校时没有注意过的内容，这里特别记录，以作提醒。
+<!-- raw HTML omitted --><!-- raw HTML omitted --></p>
+<h2 id="吃异常">吃异常</h2>
+<p>不应随意的吃掉异常，catch(Exception)这种更是过分，会在出现问题时为排查带来很大的困扰，因此要养成习惯，不论什么异常，都要有处理。
+<!-- raw HTML omitted --><!-- raw HTML omitted --></p>
+<h2 id="日志处理">日志处理</h2>
+<p>不要依赖e.printStackTrace();。标准输出流并不是很可靠，因此要使用logger，并附带足够的信息。
+<!-- raw HTML omitted --><!-- raw HTML omitted --></p>
+<h2 id="异常与错误码对前端的影响">异常与错误码对前端的影响</h2>
+<p>由于之前没有顾及这一问题，不同错误场景抛出了相同的异常，在项目配置了异常与错误码的关联后，一个登陆相关的功能不论哪一环节出错都会抛出401的鉴权错误。<!-- raw HTML omitted -->这样的处理一旦前端为401安排的重新登陆的逻辑，且后端登陆功能不可用，就会出现一个死循环，不断地重试登陆。因此，在类似的场景下，要区分不同异常与错误码。</p>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">老东叔</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2020-06-14
+        <a href="./commit/3e8ae7760834b5e6aa6145fba2be9ec21a9247c1" title="replace with hugo">(3e8ae77)</a>
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      
+      <nav class="post-nav">
+        <a class="prev" href="/post/spring%E4%B8%AD%E7%9A%84%E6%B3%A8%E5%85%A5%E6%96%B9%E5%BC%8F%E5%AF%B9%E6%AF%94/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">spring中的注入方式对比</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/post/%E8%A2%AB%E5%AB%8C%E5%BC%83%E7%9A%84request%E7%9A%84%E4%B8%80%E7%94%9F/">
+            <span class="next-text nav-default">被嫌弃的Request的一生</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:jiandong.liu93@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://github.com/Meepoljd" class="iconfont icon-github" title="github"></a>
+  <a href="http://localhost:1313/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2019 - 
+    2020
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">老东叔</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.d7b7ada643c9c1a983026e177f141f7363b4640d619caf01d8831a6718cd44ea.js"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

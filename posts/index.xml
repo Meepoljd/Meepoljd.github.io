@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Posts on My New Hugo Site</title>
+    <link>http://example.org/posts/</link>
+    <description>Recent content in Posts on My New Hugo Site</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 14 Jun 2020 00:10:50 +0000</lastBuildDate>
+    
+	<atom:link href="http://example.org/posts/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Hugo 个人博客搭建与内容同步</title>
+      <link>http://example.org/posts/hugo-%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E4%B8%8E%E5%86%85%E5%AE%B9%E5%90%8C%E6%AD%A5/</link>
+      <pubDate>Sun, 14 Jun 2020 00:10:50 +0000</pubDate>
+      
+      <guid>http://example.org/posts/hugo-%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E4%B8%8E%E5%86%85%E5%AE%B9%E5%90%8C%E6%AD%A5/</guid>
+      <description>yuque-sync同步插件 go get -u github.com/gudegg/yuque-sync 参考 https://github.com/gudegg/yuque-syncyuque-sync -n=namespace [options:-o、-p、-t]namespace说明: 如[https://www.yuque.com/yuque/help](https://www.yuque.com/yuque/help),则namespace为yuque/help,详细查看官方文档Repo - 仓库,可以从 https://www.yuque.com/api/v2/users/yuque/repos获取所有你公开的namespace,链接中的yuque替换成你自己的登录名
+Usage of yuque-sync: -n string 设置namespace [-o] bool 文件同名覆盖写入 (default true) [-p] string 设置存储路径 (default &amp;quot;download/&amp;quot;) [-t] string 文件写入格式,支持hexo、hugo (default &amp;quot;raw&amp;quot;) </description>
+    </item>
+    
+    <item>
+      <title>spacemacs golang 开发环境配置与使用</title>
+      <link>http://example.org/posts/spacemacs-golang-%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E4%B8%8E%E4%BD%BF%E7%94%A8/</link>
+      <pubDate>Sat, 13 Jun 2020 23:42:11 +0000</pubDate>
+      
+      <guid>http://example.org/posts/spacemacs-golang-%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E4%B8%8E%E4%BD%BF%E7%94%A8/</guid>
+      <description>spacemacs镜像 https://mirrors.tuna.tsinghua.edu.cn/help/elpa/ master 分支 添加下面的代码到.spacemacs的dotspacemacs/user-init()
+(setq configuration-layer--elpa-archives &#39;((&amp;quot;melpa-cn&amp;quot; . &amp;quot;http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/&amp;quot;) (&amp;quot;org-cn&amp;quot; . &amp;quot;http://mirrors.tuna.tsinghua.edu.cn/elpa/org/&amp;quot;) (&amp;quot;gnu-cn&amp;quot; . &amp;quot;http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/&amp;quot;))) develop 分支 使用 configuration-layer-elpa-archives 代替原来的 configuration-layer--elpa-archives （ -- 换成 - ）
+(setq configuration-layer-elpa-archives &#39;((&amp;quot;melpa-cn&amp;quot; . &amp;quot;http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/&amp;quot;) (&amp;quot;org-cn&amp;quot; . &amp;quot;http://mirrors.tuna.tsinghua.edu.cn/elpa/org/&amp;quot;) (&amp;quot;gnu-cn&amp;quot; . &amp;quot;http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/&amp;quot;))) go layer依赖 参考 https://emacs-lsp.github.io/lsp-mode/page/lsp-bingo/ 安装go-bingo与gopls
+go get -u github.com/saibing/bingo GO111MODULE=on go get golang.org/x/tools/gopls@latest dotspacemacs配置 layer选择
+dotspacemacs-configuration-layers &#39;(python ;; ---------------------------------------------------------------- ;; Example of useful layers you may want to use right away. ;; Uncomment some layer names and press `SPC f e R&#39; (Vim style) or ;; `M-m f e R&#39; (Emacs style) to install them.</description>
+    </item>
+    
+    <item>
+      <title>spring中的注入方式对比</title>
+      <link>http://example.org/posts/spring%E4%B8%AD%E7%9A%84%E6%B3%A8%E5%85%A5%E6%96%B9%E5%BC%8F%E5%AF%B9%E6%AF%94/</link>
+      <pubDate>Tue, 17 Sep 2019 19:00:47 +0000</pubDate>
+      
+      <guid>http://example.org/posts/spring%E4%B8%AD%E7%9A%84%E6%B3%A8%E5%85%A5%E6%96%B9%E5%BC%8F%E5%AF%B9%E6%AF%94/</guid>
+      <description>@Autowired Spring定义的注解，在用多种实现时，可以使用@Qualifier确定选项，避免混淆     @Inject JSR-330中定义的注解，在Spring中几乎的Autowired一致。其中一个区别在于Inject没有required字段。Inject的优势是可以注入一个provider，实现懒加载。为了避免混淆，可以使用Name注解指定。   @Resource JSR-250中定义的注解。与以上的两个注解很像，但是在执行是有所不同，Resource首先根据name，其次按照类型搜索注入范围。而以上两个注解首先根据name其次按照type&amp;amp;qualifier。    因此一个常见的使用上的区分在于，当出现同名Bean时， 实现不同 在spring中，Inject与Autowired是由org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor处理，而Resource由org.springframework.context.annotation.CommonAnnotationBeanPostProcessor处理。其中原文描述Inject与Autowired关系如下_Also supports JSR-330&amp;rsquo;s javax.inject.Inject @Inject annotation, if available, as a direct alternative to Spring&amp;rsquo;s own @Autowired._ BeanPostProcessor 在spring启动后，会调用其中的refresh()方法。在方法中会向BeanFactory注册PostProcessor。在bean初始化时，会调用postProcessor进行处理。 AutowiredAnnotationBeanPostProcessor 构造函数如下，声明了需要处理的几种注解类型
+public AutowiredAnnotationBeanPostProcessor() { this.autowiredAnnotationTypes.add(Autowired.class); this.autowiredAnnotationTypes.add(Value.class); try { this.autowiredAnnotationTypes.add((Class&amp;lt;? extends Annotation&amp;gt;) ClassUtils.forName(&amp;#34;javax.inject.Inject&amp;#34;, AutowiredAnnotationBeanPostProcessor.class.getClassLoader())); logger.trace(&amp;#34;JSR-330 &amp;#39;javax.inject.Inject&amp;#39; annotation found and supported for autowiring&amp;#34;); } catch (ClassNotFoundException ex) { // JSR-330 API not available - simply skip.</description>
+    </item>
+    
+    <item>
+      <title>Bad smell</title>
+      <link>http://example.org/posts/bad-smell/</link>
+      <pubDate>Wed, 11 Sep 2019 19:33:26 +0000</pubDate>
+      
+      <guid>http://example.org/posts/bad-smell/</guid>
+      <description>在代码评审时有两个问题被指出了，主要涉及多层嵌套与异常处理的习惯，以及一些平时工作上的习惯问题。&amp;lt; !&amp;ndash; more &amp;ndash;&amp;gt; 多层的if嵌套 原版的代码中，对一个接口的调用的返回结果进行检查，分情况检查错误抛出异常，或者返回结果的流程如下
+// 这里略过接口的调用过程 Response rep = new Response(); if (rep != null) { if (!res.hasError()) { // res中内容提取content  if (content != null) { return content; } } } throw new Exception(&amp;#34;在这里抛出异常&amp;#34;); 这只是一个简化的示意，真是的代码结合具体业务逻辑，整个代码嵌套了五层。可读性极差。因此，使用卫语句重构代码，那个把throw放在最后的思路简直一无是处。重构后代码如下。
+// 这里略过接口的调用过程 Response rep = new Response(); if (rep == null) { throw new Exception(&amp;#34;请求结果为空&amp;#34;); } if (rep.hasError()) { throw new EXception(); } // 处理。。。 if (content == null) { throw new Exception(); } return content; 这个评审也要注意，经手的代码中的bad smell，在提交前要进行力所能及的修改，不能因为是同事写的就不管不顾，不然评审时可能通不过。 异常处理 近期异常相关的代码出现的诸多错漏，这些问题是之前在学校时没有注意过的内容，这里特别记录，以作提醒。 吃异常 不应随意的吃掉异常，catch(Exception)这种更是过分，会在出现问题时为排查带来很大的困扰，因此要养成习惯，不论什么异常，都要有处理。 日志处理 不要依赖e.</description>
+    </item>
+    
+    <item>
+      <title>被嫌弃的Request的一生</title>
+      <link>http://example.org/posts/%E8%A2%AB%E5%AB%8C%E5%BC%83%E7%9A%84request%E7%9A%84%E4%B8%80%E7%94%9F/</link>
+      <pubDate>Sat, 07 Sep 2019 11:01:43 +0000</pubDate>
+      
+      <guid>http://example.org/posts/%E8%A2%AB%E5%AB%8C%E5%BC%83%E7%9A%84request%E7%9A%84%E4%B8%80%E7%94%9F/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>getBeansOfType与getBeans区别</title>
+      <link>http://example.org/posts/getbeansoftype%E4%B8%8Egetbeans%E5%8C%BA%E5%88%AB/</link>
+      <pubDate>Fri, 06 Sep 2019 12:13:54 +0000</pubDate>
+      
+      <guid>http://example.org/posts/getbeansoftype%E4%B8%8Egetbeans%E5%8C%BA%E5%88%AB/</guid>
+      <description>问题描述 项目定义了一个CustomApplicationContext用于管理项目中的一些Bean。同时定义了一个ServiceLocator的工具类用于获取CustomApplicationContext管理的Bean。在项目新接入外部服务时，使用了ConditionalOnProperty注解进行了Bean的配置式注册。但随后发现运行时找不到该Bean。问题原因 使用AutoConfiguration机制进行Bean的创建
+@ConditionalOnProperty(names={&amp;#34;name.of.property&amp;#34;}) public class MyConfiguration { @Bean public MyService myService() {return new MyService();} } 在ServiceLocator中，使用如下代码获取相应实例
+ApplicationContext customContext = context.getBean(&amp;#34;Name of Custom Context&amp;#34;); Map&amp;lt;&amp;gt; names = customContext.getNamesOfType(MyService.class); // 检测names个数，等操作无关主题，略 以上代码会在运行时抛出一个找不到Bean的异常。经测试，使用customContext.getBean(MyService.class)可以正常获取实例。通过检查代码发现，以上两种查找有一个主要区别在于getBean的搜索机制会在当前context找不到指定Bean时，递归的搜索父类。代码如下
+// 这一函数式getBean的主要内容 private &amp;lt;T&amp;gt; T resolveBean(ResolvableType requiredType, @Nullable Object[] args, boolean nonUniqueAsNull) { NamedBeanHolder&amp;lt;T&amp;gt; namedBean = resolveNamedBean(requiredType, args, nonUniqueAsNull); if (namedBean != null) { return namedBean.getBeanInstance(); } BeanFactory parent = getParentBeanFactory(); if (parent instanceof DefaultListableBeanFactory) { return ((DefaultListableBeanFactory) parent).resolveBean(requiredType, args, nonUniqueAsNull); } else if (parent !</description>
+    </item>
+    
+    <item>
+      <title>Spring Dispatch机制</title>
+      <link>http://example.org/posts/spring-dispatch%E6%9C%BA%E5%88%B6/</link>
+      <pubDate>Thu, 29 Aug 2019 10:06:38 +0000</pubDate>
+      
+      <guid>http://example.org/posts/spring-dispatch%E6%9C%BA%E5%88%B6/</guid>
+      <description>为了好的理解Spring中如何搜索用于处理请求的类，所以对Dispatch的机制进行了解。基本概念 什么是servlet servlet其实是一个接口，包含了init，service等函数。是java用于规定一个用于处理请求的类，什么时间该做什么的规范。放在一个容器里，例如tomcat，tomcat会负责执行这些行为处理请求。 什么是DispatcherServlet 以下内容主要来自spring-framwork文档及注释。Dispatcher用于将Http请求分发到已经注册的Handler中处理。并在其中提供了mapping的映射机制以及异常处理。以下是几个流程中涉及的几个主要概念：
+ HandlerMapping：控制从request向对应处理的handler的分发关系。默认使用BeanNameHandlerMapping与RequestMappingHandlerMapping。 HandlerAdapter： HandlerExceptionResolver：用于指定异常处理的策略 ViewResolver：指定View的处理策略 RequestToViewNameTranslator：若用户没有支持某个view或者view name，就会根据其中定义的翻译关系将请求转换为view name MultipartResolver：处理multipart请求的策略 LocaleResolver：用于处理i18n策略 ThemeResolver：处理theme的策略  一个web应用可以定义任意数量的DispatcherServlets。没一个DispatcherServlets操作自己的命名空间，使用自己的上下文来维护mapping，handler等内容。只有spring的ContextLoaderListener加载的root context是公用的。对Sping 3.1一个dispatcherServlets可以被注入一个context，而不用自己创建一个。 DispatcherServlet 本节主要通过DispatcherServlet的视角，来对整个机制进行一个大致的了解。为了提炼内容，这里略过常量定义与getter，setter。通过static代码块，spring首先为Dispatcher加载的默认的strategy。由于是默认配置，所以并不推荐开发者修改。
+static { ClassPathResource resource = new ClassPathResource(DEFAULT_STRATEGIES_PATH, DispatcherServlet.class); defaultStrategies = PropertiesLoaderUtils.loadProperties(resource); } 在构造器的实现上，有以下几种：
+ 默认的无参数构造器：Dispatcher会创建一个使用默认参数的内部context 接收context构造器：通过接受一个给定的context创建Dispatcher  以上的实现主要内容都来自于父类，这里不再展开。在后面的onRefresh回调函数中，定义了各个strategy初始化的行为。这一回调函数会在context的初始化，以及刷新过程内调用（同样位于父类）。
+@Override protected void onRefresh(ApplicationContext context) { initStrategies(context); } protected void initStrategies(ApplicationContext context) { initMultipartResolver(context); initLocaleResolver(context); initThemeResolver(context); initHandlerMappings(context); initHandlerAdapters(context); initHandlerExceptionResolvers(context); initRequestToViewNameTranslator(context); initViewResolvers(context); initFlashMapManager(context); } 在这里调用的若干initXXXX函数，主要用于获取实例，以initMultipartResolver为例。
+private void initMultipartResolver(ApplicationContext context) { try { this.</description>
+    </item>
+    
+  </channel>
+</rss>
